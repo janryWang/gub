@@ -1,0 +1,50 @@
+{
+  "name": "gub",
+  "version": "0.1.0",
+  "description": "",
+  "main": "lib",
+  "bin": {
+    "gub": "./bin/index"
+  },
+  "scripts": {
+    "build": "babel src --out-dir lib",
+    "precommit": "npm run build && lint-staged && git add -A"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/janryWang/gub.git"
+  },
+  "author": "janry",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/janryWang/gub/issues"
+  },
+  "homepage": "https://github.com/janryWang/gub#readme",
+  "lint-staged": {
+    "src/*.js": [
+      "prettier --write --tab-width 4 --no-semi",
+      "git add"
+    ]
+  },
+  "dependencies": {
+    "chalk": "^2.3.2",
+    "cli-spinner": "^0.2.8",
+    "commander": "^2.15.1",
+    "execa": "^0.10.0",
+    "fs-extra": "^5.0.0",
+    "git-url-parse": "^9.0.0",
+    "git-username": "^1.0.0",
+    "inquirer": "^5.2.0",
+    "moment": "^2.22.1",
+    "nanoid": "^1.0.2",
+    "nodegit": "^0.22.0",
+    "through2": "^2.0.3"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.0.0-beta.42",
+    "@babel/core": "^7.0.0-beta.42",
+    "husky": "^0.14.3",
+    "lint-staged": "^4.3.0",
+    "prettier": "^1.11.x"
+  }
+}
