@@ -64,24 +64,29 @@ const cloneRepo = async (repos, dir = process.cwd()) => {
     const pkg = await getPkgInfo(cwd)
     console.log("\n\n")
     spinner.start()
-    await Git.Clone(repos, tmp_path)
-    await fs.copy(tmp_path, dir, {
-        overwrite: true,
-        filter: src => {
-            if (src.indexOf(".gitignore") > -1) return true
-            return src.indexOf(".git") == -1
-        }
-    })
-    await transform(path.resolve(dir, "./package.json"), function(file) {
-        const _pkg = file ? JSON.parse(file) : {}
-        if (file) {
-            return JSON.stringify(Object.assign(_pkg, pkg), null, 2)
-        } else {
-            return JSON.stringify(pkg, null, 2)
-        }
-    })
-    spinner.stop(true)
-    execa.shell("npm install", { cwd: dir }).stdout.pipe(process.stdout)
+    try {
+        await Git.Clone(repos, tmp_path)
+        await fs.copy(tmp_path, dir, {
+            overwrite: true,
+            filter: src => {
+                if (src.indexOf(".gitignore") > -1) return true
+                return src.indexOf(".git") == -1
+            }
+        })
+        await transform(path.resolve(dir, "./package.json"), function(file) {
+            const _pkg = file ? JSON.parse(file) : {}
+            if (file) {
+                return JSON.stringify(Object.assign(_pkg, pkg), null, 2)
+            } else {
+                return JSON.stringify(pkg, null, 2)
+            }
+        })
+        spinner.stop(true)
+        execa.shell("npm install", { cwd: dir }).stdout.pipe(process.stdout)
+    } catch (e) {
+        spinner.stop(true)
+        throw e
+    }
 }
 
 program.command("init <repos> [dir]").action(async (repos, dir) => {
