@@ -1,6 +1,5 @@
 import program from "commander"
 import nanoid from "nanoid"
-import Git from "nodegit"
 import log from "./log"
 import fs from "fs-extra"
 import path from "path"
