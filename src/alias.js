@@ -4,7 +4,7 @@ const path = require("path")
 const inquirer = require("inquirer")
 const LZ = require("lz4")
 
-const DB_PATH = path.resolve(__dirname, "../.db.json")
+const DB_PATH = "/.hub_storage_db"
 
 const readDB = async path => {
     const file = await fs.readFile(path)
