@@ -3,8 +3,9 @@ const fs = require("fs-extra")
 const path = require("path")
 const inquirer = require("inquirer")
 const LZ = require("lz4")
+const homedir = require("homedir")
 
-const DB_PATH = "/.hub_storage_db"
+const DB_PATH = path.resolve(homedir(), "./.gub_storage_db")
 
 const readDB = async path => {
     const file = await fs.readFile(path)
