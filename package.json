@@ -1,6 +1,6 @@
 {
   "name": "gub",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "",
   "main": "lib",
   "bin": {
@@ -37,6 +37,7 @@
     "getenv": "^0.7.0",
     "git-url-parse": "^9.0.0",
     "git-username": "^1.0.0",
+    "homedir": "^0.6.0",
     "inquirer": "^5.2.0",
     "lz4": "^0.5.3",
     "mkdirp": "^0.5.1",
