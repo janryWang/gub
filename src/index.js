@@ -142,11 +142,17 @@ const cloneRepo = async (repos, dir = process.cwd()) => {
     }
 }
 
-program.command("init <repos> [dir]").action(async (repos, dir) => {
+program.command("init [repos] [dir]").action(async (repos, dir) => {
     try {
         log.flat(banner)
+        let no_repos = !repos
+        if (!repos) {
+            repos = await selectAliasViewer()
+        }
         await cloneRepo(repos, dir)
-        await addAlias(repos, gh.parse(repos).name)
+        if (no_repos) {
+            await addAlias(repos, gh.parse(repos).name)
+        }
     } catch (e) {
         if (e) {
             log.error(e.Error || e.Message || e.message)
@@ -155,19 +161,7 @@ program.command("init <repos> [dir]").action(async (repos, dir) => {
         }
     }
 })
-program.command("init").action(async () => {
-    const url = await selectAliasViewer()
-    try {
-        log.flat(banner)
-        await cloneRepo(repos)
-    } catch (e) {
-        if (e) {
-            log.error(e.Error || e.Message || e.message)
-        } else {
-            log.error("Operation Failed!")
-        }
-    }
-})
+
 program
     .command("alias")
     .option("-c, --create", "Add an repository alias")
