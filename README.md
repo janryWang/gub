@@ -4,7 +4,7 @@
 
 ### Install
 
-```
+```bash
 npm install -g gub
 ```
 
@@ -12,7 +12,18 @@ npm install -g gub
 
 ### Usage
 
-```
+#### INIT
+
+```bash
 gub init https://github.com/janryWang/gub.git
 ```
 
+#### INIT WITH ALIAS
+
+```bash
+gub init
+gub alias --create
+gub alias --update
+gub alias --remove
+
+```

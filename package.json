@@ -1,6 +1,6 @@
 {
   "name": "gub",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "",
   "main": "lib",
   "bin": {
@@ -27,14 +27,19 @@
     ]
   },
   "dependencies": {
+    "@babel/preset-es2015": "^7.0.0-beta.46",
+    "@babel/runtime": "^7.0.0-beta.46",
     "chalk": "^2.3.2",
     "cli-spinner": "^0.2.8",
     "commander": "^2.15.1",
     "execa": "^0.10.0",
     "fs-extra": "^5.0.0",
+    "getenv": "^0.7.0",
     "git-url-parse": "^9.0.0",
     "git-username": "^1.0.0",
     "inquirer": "^5.2.0",
+    "lz4": "^0.5.3",
+    "mkdirp": "^0.5.1",
     "moment": "^2.22.1",
     "nanoid": "^1.0.2",
     "nodegit": "^0.22.0",
@@ -43,6 +48,9 @@
   "devDependencies": {
     "@babel/cli": "^7.0.0-beta.42",
     "@babel/core": "^7.0.0-beta.42",
+    "@babel/node": "^7.0.0-beta.46",
+    "@babel/plugin-transform-runtime": "^7.0.0-beta.46",
+    "@babel/preset-env": "^7.0.0-beta.46",
     "husky": "^0.14.3",
     "lint-staged": "^4.3.0",
     "prettier": "^1.11.x"
