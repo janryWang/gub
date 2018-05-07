@@ -67,8 +67,8 @@ export const createAliasViewer = async () => {
             message: "Please input an alias"
         }
     ])
-
-    return addAlias(res.url, res.alias)
+    await addAlias(res.url, res.alias)
+    log.success("Successful operation!")
 }
 
 export const selectAliasViewer = async () => {
