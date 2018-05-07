@@ -17,7 +17,7 @@ import {
     removeAliasViewer,
     addAlias
 } from "./alias"
-import gh from "parse-github-url"
+import parseGithubUrl from "parse-github-url"
 
 const banner =
     "\n\n|||||||||||||||||||||||||||||||||||||||||||||||||||||\n\n Welcome use gub to init your npm package.\n\n  https://github.com/janryWang/gub\n\n|||||||||||||||||||||||||||||||||||||||||||||||||||||\n\n"
@@ -150,7 +150,7 @@ program.command("init [repos] [dir]").action(async (repos, dir) => {
         }
         await cloneRepo(repos, dir)
         if (no_repos) {
-            await addAlias(repos, gh.parse(repos).name)
+            await addAlias(repos, parseGithubUrl(repos).name)
         }
     } catch (e) {
         if (e) {

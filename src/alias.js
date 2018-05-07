@@ -28,6 +28,7 @@ export const addAlias = async (url, alias) => {
     if (!url || !alias) return
     await fs.ensureFile(DB_PATH)
     let dataSource = await readDB(DB_PATH)
+    if (dataSource.find(item => item.url === url)) return
     if (Array.isArray(dataSource)) {
         dataSource = dataSource.concat({ url, alias })
     } else {
