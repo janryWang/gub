@@ -33,12 +33,12 @@
     "cli-spinner": "^0.2.8",
     "commander": "^2.15.1",
     "execa": "^0.10.0",
-    "fs-extra": "^5.0.0",
+    "fs-extra": "^6.0.1",
     "getenv": "^0.7.0",
     "git-url-parse": "^9.0.0",
     "git-username": "^1.0.0",
     "homedir": "^0.6.0",
-    "inquirer": "^5.2.0",
+    "inquirer": "^6.0.0",
     "lz4": "^0.5.3",
     "mkdirp": "^0.5.1",
     "moment": "^2.22.1",
@@ -51,7 +51,7 @@
     "@babel/plugin-transform-runtime": "^7.0.0-beta.46",
     "@babel/preset-env": "^7.0.0-beta.46",
     "husky": "^0.14.3",
-    "lint-staged": "^4.3.0",
+    "lint-staged": "^7.2.0",
     "prettier": "^1.11.x"
   }
 }
