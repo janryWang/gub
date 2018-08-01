@@ -10,6 +10,7 @@ import chalk from "chalk"
 import mkdirp from "mkdirp"
 import { Spinner } from "cli-spinner"
 import getenv from "getenv"
+import escapeStringRegexp from "escape-string-regexp"
 import {
     createAliasViewer,
     selectAliasViewer,
@@ -67,12 +68,13 @@ const transform = async (file_path, fn) => {
  */
 
 const getPkgInfo = async cwd => {
+    const name = cwd.replace(/.*\/([^\/]+)$/g, "$1")
     return await inquirer.prompt([
         {
             type: "input",
             name: "name",
             validate: required,
-            default: cwd.replace(/.*\/([^\/]+)$/g, "$1"),
+            default: name,
             message: "Please input the package name"
         },
         {
@@ -101,6 +103,28 @@ const getPkgInfo = async cwd => {
     ])
 }
 
+const traverseFile = async (dir, traverse) => {
+    const files = await fs.readdir(dir)
+    for (let i = 0; i < files.length; i++) {
+        try {
+            let file_path = path.join(dir, files[i])
+            let status = await fs.stat(file_path)
+            if (status) {
+                if (status.isFile()) {
+                    let content = await fs.readFile(file_path, "utf-8")
+                    if (typeof traverse === "function") {
+                        let newContent = traverse(content)
+                        if (newContent !== undefined)
+                            await fs.writeFile(file_path, newContent)
+                    }
+                } else {
+                    await traverseFile(file_path, traverse)
+                }
+            }
+        } catch (e) {}
+    }
+}
+
 const cloneRepo = async (repos, dir = process.cwd()) => {
     const tmp_path = `/tmp/gub_repos/${nanoid()}`
     const cwd = process.cwd()
@@ -123,14 +147,26 @@ const cloneRepo = async (repos, dir = process.cwd()) => {
             }
         })
 
+        let oldPkgName = "",
+            newPkgName = pkg.name
+
         await transform(path.resolve(dir, "./package.json"), function(file) {
             const _pkg = file ? JSON.parse(file) : {}
+            oldPkgName = _pkg.name
             if (file) {
                 return JSON.stringify(Object.assign(_pkg, pkg), null, 2)
             } else {
                 return JSON.stringify(pkg, null, 2)
             }
         })
+
+        await traverseFile(dir, target => {
+            return target.replace(
+                new RegExp(escapeStringRegexp(oldPkgName), "ig"),
+                newPkgName
+            )
+        })
+
         const tnpm = await hasTnpm()
         await execa.shell(`${tnpm ? "tnpm" : "npm"} install`, { cwd: dir })
         spinner.stop(true)
