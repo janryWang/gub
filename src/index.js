@@ -125,7 +125,7 @@ const traverseFile = async (dir, traverse) => {
     }
 }
 
-const cloneRepo = async (repos, dir = process.cwd()) => {
+const cloneRepo = async (repos, branch, dir = process.cwd()) => {
     const tmp_path = `/tmp/gub_repos/${nanoid()}`
     const cwd = process.cwd()
     const spinner = new Spinner(chalk.yellow("Cloning your repository... %s"))
@@ -137,7 +137,9 @@ const cloneRepo = async (repos, dir = process.cwd()) => {
         if (!fs.existsSync(tmp_path)) {
             await promiseCall(mkdirp, tmp_path)
         }
-        await execa.shell(`git clone ${repos} ${tmp_path}`)
+        await execa.shell(
+            `git clone ${branch ? `-b ${branch}` : ""} ${repos} ${tmp_path}`
+        )
 
         await fs.copy(tmp_path, dir, {
             overwrite: true,
@@ -177,25 +179,28 @@ const cloneRepo = async (repos, dir = process.cwd()) => {
     }
 }
 
-program.command("init [repos] [dir]").action(async (repos, dir) => {
-    try {
-        log.flat(banner)
-        let no_repos = !repos
-        if (!repos) {
-            repos = await selectAliasViewer()
+program
+    .command("init [repos] [dir]")
+    .option("-b, --branch <branch>", "Init with git branch")
+    .action(async (repos, dir, options) => {
+        try {
+            log.flat(banner)
+            let no_repos = !repos
+            if (!repos) {
+                repos = await selectAliasViewer()
+            }
+            await cloneRepo(repos, options.branch, dir)
+            if (no_repos) {
+                await addAlias(repos, parseGithubUrl(repos).name)
+            }
+        } catch (e) {
+            if (e) {
+                log.error(e.Error || e.Message || e.message)
+            } else {
+                log.error("Operation Failed!")
+            }
         }
-        await cloneRepo(repos, dir)
-        if (no_repos) {
-            await addAlias(repos, parseGithubUrl(repos).name)
-        }
-    } catch (e) {
-        if (e) {
-            log.error(e.Error || e.Message || e.message)
-        } else {
-            log.error("Operation Failed!")
-        }
-    }
-})
+    })
 
 program
     .command("alias")
